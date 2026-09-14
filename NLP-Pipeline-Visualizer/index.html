@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>NLP Pipeline Visualizer</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- Background -->
+    <div class="background"></div>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+      <h1>
+        <i class="fa-solid fa-brain"></i>
+        NLP Pipeline Visualizer
+      </h1>
+
+      <p>
+        Learn how Natural Language Processing converts raw text into
+        machine-readable information.
+      </p>
+    </header>
+
+    <!-- ================= INPUT ================= -->
+
+    <section class="input-section">
+      <textarea id="inputText" placeholder="Type your sentence here...">
+I love playing Cricket 🏏 in sunny days!!</textarea
+      >
+
+      <div class="button-group">
+        <button type="button" id="processBtn" class="primary">
+          <i class="fa-solid fa-play"></i>
+          Process
+        </button>
+
+        <button type="button" id="sampleBtn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Sample Text
+        </button>
+
+        <button type="button" id="clearBtn">
+          <i class="fa-solid fa-trash"></i>
+          Clear
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PIPELINE FLOW ================= -->
+    <section class="pipeline-flow">
+      <div class="flow-step active">Raw Text</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Cleaning</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Tokenization</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Stem / Lemma</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Stop Words</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Vectorization</div>
+
+      <div class="arrow">
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+
+      <div class="flow-step">Prediction</div>
+    </section>
+
+    <!-- ================= OUTPUT ================= -->
+
+    <main id="pipelineContainer">
+      <!-- ================= CLEANING ================= -->
+
+      <div class="card hidden" id="cleaningCard">
+        <div class="card-header">
+          <span class="step">STEP 1</span>
+
+          <h2>
+            <i class="fa-solid fa-broom"></i>
+            Text Cleaning
+          </h2>
+        </div>
+
+        <p class="description">
+          Cleaning standardizes the text by removing unnecessary symbols,
+          punctuation, emojis and converting everything to lowercase.
+        </p>
+
+        <div class="result" id="cleanedOutput"></div>
+      </div>
+
+      <!-- ================= TOKENIZATION ================= -->
+
+      <div class="card hidden" id="tokenCard">
+        <div class="card-header">
+          <span class="step">STEP 2</span>
+
+          <h2>
+            <i class="fa-solid fa-scissors"></i>
+
+            Tokenization
+          </h2>
+        </div>
+
+        <p class="description">
+          Tokenization splits the sentence into individual words called tokens.
+        </p>
+
+        <div class="token-container" id="tokenOutput"></div>
+      </div>
+
+      <!-- ================= STEM & LEMMA ================= -->
+
+      <div class="dual-container">
+        <!-- STEMMING -->
+
+        <div class="card hidden half" id="stemCard">
+          <div class="card-header">
+            <span class="step">STEP 3A</span>
+
+            <h2>
+              <i class="fa-solid fa-seedling"></i>
+
+              Stemming
+            </h2>
+          </div>
+
+          <p class="description">
+            Removes suffixes to obtain the stem of a word.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Original</th>
+
+                <th>Stem</th>
+              </tr>
+            </thead>
+
+            <tbody id="stemTable"></tbody>
+          </table>
+        </div>
+
+        <!-- LEMMATIZATION -->
+
+        <div class="card hidden half" id="lemmaCard">
+          <div class="card-header">
+            <span class="step">STEP 3B</span>
+
+            <h2>
+              <i class="fa-solid fa-book"></i>
+
+              Lemmatization
+            </h2>
+          </div>
+
+          <p class="description">
+            Converts words into their dictionary forms using grammar.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Original</th>
+
+                <th>Lemma</th>
+              </tr>
+            </thead>
+
+            <tbody id="lemmaTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= STOP WORDS ================= -->
+
+      <div class="card hidden" id="stopCard">
+        <div class="card-header">
+          <span class="step">STEP 4</span>
+
+          <h2>
+            <i class="fa-solid fa-filter"></i>
+
+            Stop Word Removal
+          </h2>
+        </div>
+
+        <div class="stop-layout">
+          <div>
+            <h3>Remaining Words</h3>
+
+            <div id="remainingWords" class="token-container"></div>
+          </div>
+
+          <div>
+            <h3>Removed Stop Words</h3>
+
+            <div id="removedWords" class="token-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VECTORIZATION ================= -->
+
+      <div class="card hidden" id="vectorCard">
+        <div class="card-header">
+          <span class="step">STEP 5</span>
+
+          <h2>
+            <i class="fa-solid fa-chart-column"></i>
+
+            Vectorization
+          </h2>
+        </div>
+
+        <div class="vector-tabs">
+          <button type="button" class="tab active" data-tab="bow">Bag of Words</button>
+
+          <button type="button" class="tab" data-tab="tfidf">TF-IDF</button>
+
+          <button type="button" class="tab" data-tab="embedding">Embedding</button>
+        </div>
+
+        <div id="vectorContent">
+          <div class="vector-placeholder">
+            Select a vectorization method to visualize.
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= MODEL ================= -->
+
+      <div class="card hidden prediction-box" id="predictionCard">
+        <div class="prediction-icon">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+
+        <div class="prediction-badge neutral" id="predictionBadge">Neutral</div>
+
+        <div class="prediction-status">
+          <span class="prediction-emoji" id="predictionEmoji">🤖</span>
+          <h3 id="predictionResult">Waiting...</h3>
+        </div>
+
+        <div class="confidence">
+          <span>Confidence</span>
+
+          <div class="confidence-bar">
+            <div id="confidenceFill"></div>
+          </div>
+
+          <span id="confidenceValue">0%</span>
+        </div>
+
+        <div class="prediction-reasoning">
+          <div class="reason-line"><strong>Positive words:</strong> <span id="positiveCount">0</span></div>
+          <div class="reason-line"><strong>Negative words:</strong> <span id="negativeCount">0</span></div>
+          <div class="reason-line"><strong>Keywords:</strong> <span id="keywordsList">none</span></div>
+        </div>
+
+        <div class="prediction-note" id="predictionExplanation">
+          Prediction will appear once the text has been analyzed.
+        </div>
+
+        <div class="insight">
+          <strong>How it works:</strong>
+          The model studies the text patterns, compares them with learned examples, and assigns a confidence score to the prediction.
+        </div>
+      </div>
+
+      <div class="processing-panel hidden" id="processingPanel">
+        <div class="processing-header">
+          <i class="fa-solid fa-brain"></i>
+
+          <span>AI Processing...</span>
+        </div>
+
+        <div class="processing-step" id="statusText">Waiting...</div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>Made for learning Natural Language Processing (NLP)</footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
